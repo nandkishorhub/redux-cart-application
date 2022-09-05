@@ -21,7 +21,7 @@ function App() {
       <h1>Loading...</h1>
     </div>
   ) : apiError ? (
-    // to avoid writing styling for errors , have used loading styling here
+    // to avoid writing of styling for errors , have used loading styling here
     <div className="loading">
       <h1> {apiError}</h1>
     </div>

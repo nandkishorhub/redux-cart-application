@@ -5,16 +5,18 @@ const url = "https://course-api.com/react-useReducer-cart-project";
 
 const initialState = {
   cartItems: [],
-  // here ammount means total no. of items in cart
+  // here amount means total no. of items in cart
   amount: 0,
   total: 0,
   isLoading: false,
   apiError: "",
 };
 
-// async way of fetching cartItems
+// Asynchronously fetching cartItems
 export const getCartItems = createAsyncThunk(
   "cart/getCartItems",
+  // here first param is what ever data passed from component
+  // but we are not using that so we have made it void using '_'
   async (_, thunkAPI) => {
     try {
       const resp = await axios(url);
@@ -28,6 +30,15 @@ export const getCartItems = createAsyncThunk(
     } catch (error) {
       return thunkAPI.rejectWithValue("Something went wrong, contact admin");
     }
+    // we can use fetch instead like below
+    // return await fetch(url)
+    //   .then((response) => {
+    //     return response.json();
+    //   })
+    //   .catch((error) => {
+    //     // Your error is here!
+    //     console.log("error => ", error);
+    //   });
   }
 );
 
@@ -94,7 +105,7 @@ const cartSlice = createSlice({
       state.total = total;
     },
   },
-  // here we handle async reducers/asycnThunk
+  // here we handle all async activities from createAsyncThunk
   extraReducers: {
     [getCartItems.pending]: (state) => {
       state.isLoading = true;
@@ -103,7 +114,7 @@ const cartSlice = createSlice({
       state.isLoading = false;
       state.cartItems = action.payload;
     },
-    [getCartItems.rejected]: (state, {payload}) => {
+    [getCartItems.rejected]: (state, { payload }) => {
       state.apiError = payload;
       state.isLoading = false;
     },

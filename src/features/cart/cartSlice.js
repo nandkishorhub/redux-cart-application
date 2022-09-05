@@ -1,13 +1,35 @@
-import { createSlice } from "@reduxjs/toolkit";
-import cartItems from "../../cartItems";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
+
+const url = "https://course-api.com/react-useReducer-cart-project";
 
 const initialState = {
-  cartItems: cartItems,
+  cartItems: [],
   // here ammount means total no. of items in cart
   amount: 0,
   total: 0,
   isLoading: false,
+  apiError: "",
 };
+
+// async way of fetching cartItems
+export const getCartItems = createAsyncThunk(
+  "cart/getCartItems",
+  async (_, thunkAPI) => {
+    try {
+      const resp = await axios(url);
+      // here using second param to callback function
+      // we can get access to entire application store using it's getState function
+      // console.log(thunkAPI.getState());
+      // we can dispatch action to another reducer/slice
+      //thunkAPI.dispatch(openModal())
+      // axios response store in data so always access response from data property
+      return resp.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue("Something went wrong, contact admin");
+    }
+  }
+);
 
 const cartSlice = createSlice({
   name: "cart",
@@ -70,6 +92,20 @@ const cartSlice = createSlice({
       });
       state.amount = amount;
       state.total = total;
+    },
+  },
+  // here we handle async reducers/asycnThunk
+  extraReducers: {
+    [getCartItems.pending]: (state) => {
+      state.isLoading = true;
+    },
+    [getCartItems.fulfilled]: (state, action) => {
+      state.isLoading = false;
+      state.cartItems = action.payload;
+    },
+    [getCartItems.rejected]: (state, {payload}) => {
+      state.apiError = payload;
+      state.isLoading = false;
     },
   },
 });

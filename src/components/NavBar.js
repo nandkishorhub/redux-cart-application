@@ -12,7 +12,7 @@ export const NavBar = () => {
   return (
     <nav>
       <div className="nav-center">
-        <h3>Redux</h3>
+        <h3>BASKET</h3>
         <div className="nav-container">
           <CartIcon />
           <div className="amount-container">

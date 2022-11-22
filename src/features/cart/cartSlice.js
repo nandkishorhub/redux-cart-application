@@ -30,7 +30,7 @@ export const getCartItems = createAsyncThunk(
     } catch (error) {
       return thunkAPI.rejectWithValue("Something went wrong, contact admin");
     }
-    // we can use fetch instead like below
+    // we can use aslo fetch like below
     // return await fetch(url)
     //   .then((response) => {
     //     return response.json();
@@ -53,6 +53,8 @@ const cartSlice = createSlice({
     // it means , immer lib merge state's remaining data with this update safely
     // here we do not need to return state it also handled internally
     // if you want to return value from reducer functio then write code below
+    // as below is arrow function so either wrap it using curly braces or otherwise 
+    // as it is returing implictely so add void so imme will take care of this
     //  clearCart: (state) => void (state.cartItems=[])
     // more info check this => https://stackoverflow.com/questions/60806105
     //error-an-immer-producer-returned-a-new-value-and-modified-its-draft-either-r
